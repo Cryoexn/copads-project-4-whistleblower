@@ -1,41 +1,62 @@
+//-------------------------------------------------------------
+// File  : ReporterModel.java
+// Date  : 04/28/2021
+// Author: David Pitoniak (dhp6397@rit.edu)
+// Description: Model to accept, decrypt, and decode
+//              messages from Leaker(s).
+//-------------------------------------------------------------
 
 import java.io.*;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.net.DatagramPacket;
 
+/**
+ * Model to handle encrypted messages sent to the Reporter.
+ */
 public class ReporterModel implements LeakerListener {
 
-    private BigInteger exp;
-    private BigInteger m;
-    private OAEP oaep;
-    private byte[] seed;
+    /** Exponent component of private key used for decryption. */
+    private BigInteger d;
 
+    /** Mod component of private key used for decryption. */
+    private BigInteger n;
+
+    /** Helper class to decode the decrypted byte array. */
+    private OAEP oaep;
+
+    /**
+     * Constructor to initialize the private key components and helper class.
+     *
+     * @param privateKeyFile file containing private key components.
+     */
     public ReporterModel(File privateKeyFile) {
         try {
+            // Read in private key components.
             BufferedReader br = new BufferedReader(new FileReader(privateKeyFile));
+            d = new BigInteger(br.readLine());
+            n = new BigInteger(br.readLine());
 
-            exp = new BigInteger(br.readLine());
-            m = new BigInteger(br.readLine());
-
+            // Create helper class to decode the message.
             oaep = new OAEP();
-            seed = new byte[] {
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0
-            };
 
         } catch (IOException e) {
-            System.err.println(Arrays.toString(e.getStackTrace()));
+            System.err.printf("Error: File %s was unable to be opened.\n", privateKeyFile);
             System.exit(1);
         }
-    }
+    } // end Constructor.
 
+    /**
+     * Method called when a message has been sent to the Reporters DatagramSocket.
+     *
+     * @param packet packet containing message data.
+     */
     @Override
-    public void reportMsg(BigInteger msg) throws IOException {
-        System.out.println("Encrypted: " + msg);
-        BigInteger decrypted = msg.modPow(exp, m);
-        System.out.println("Decrypted: " + decrypted);
-        System.out.println("Message  : " + oaep.decode(decrypted));
-    }
-}
+    public void reportMsg(DatagramPacket packet) {
+        try {
+            BigInteger data = new BigInteger(packet.getData(), 0, packet.getLength());
+            System.out.println(oaep.decode(data.modPow(d, n)));
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: private key does not math public key.");
+        }
+    } // end reportMsg.
+} // end ReporterModel.
