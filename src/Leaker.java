@@ -116,7 +116,7 @@ public class Leaker {
      * Print the usage message and exit.
      */
     public static void usage() {
-        System.err.println("Usage: java Leaker <rhost> <rport> <lhost> <lport> <publickeyfile> <message>");
+        System.err.println("Missing arguments\nUsage: java Leaker <rhost> <rport> <lhost> <lport> <publickeyfile> <message>");
         System.exit(1);
     } // end usage.
 } // end Leaker.

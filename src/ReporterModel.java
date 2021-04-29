@@ -37,14 +37,14 @@ public class ReporterModel implements LeakerListener {
             try {
                 d = new BigInteger(br.readLine());
             } catch(NumberFormatException ex) {
-                System.err.println("Couldn't read exponent value in public key file");
+                System.err.println("Couldn't read exponent value in private key file");
                 System.exit(1);
             }
 
             try {
                 n = new BigInteger(br.readLine());
             } catch(NumberFormatException ex) {
-                System.err.println("Couldn't read exponent value in public key file");
+                System.err.println("Couldn't read modulus value in private key file");
                 System.exit(1);
             }
 
