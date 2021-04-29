@@ -33,14 +33,26 @@ public class ReporterModel implements LeakerListener {
         try {
             // Read in private key components.
             BufferedReader br = new BufferedReader(new FileReader(privateKeyFile));
-            d = new BigInteger(br.readLine());
-            n = new BigInteger(br.readLine());
+
+            try {
+                d = new BigInteger(br.readLine());
+            } catch(NumberFormatException ex) {
+                System.err.println("Couldn't read exponent value in public key file");
+                System.exit(1);
+            }
+
+            try {
+                n = new BigInteger(br.readLine());
+            } catch(NumberFormatException ex) {
+                System.err.println("Couldn't read exponent value in public key file");
+                System.exit(1);
+            }
 
             // Create helper class to decode the message.
             oaep = new OAEP();
 
         } catch (IOException e) {
-            System.err.printf("Error: File %s was unable to be opened.\n", privateKeyFile);
+            System.err.printf("Error: %s (No such file or directory)\n", privateKeyFile);
             System.exit(1);
         }
     } // end Constructor.

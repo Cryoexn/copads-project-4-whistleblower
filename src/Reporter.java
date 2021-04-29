@@ -27,7 +27,6 @@ public class Reporter {
         if(args.length != 3) usage();
 
         try {
-
             // Create DatagramSocket at host and port.
             String hostname = args[0];
             int port = Integer.parseInt(args[1]);
@@ -46,7 +45,7 @@ public class Reporter {
      * Print the usage message and exit.
      */
     private static void usage() {
-        System.err.println("Usage: java Reporter <rhost> <rport> <privatekeyfile>");
+        System.err.println("Missing arguments\nUsage: java Reporter <rhost> <rport> <privatekeyfile>");
         System.exit(1);
     } // end usage.
 

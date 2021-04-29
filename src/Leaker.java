@@ -43,8 +43,23 @@ public class Leaker {
             // Get the public key components from file.
             File repPub = new File(args[4]);
             BufferedReader br = new BufferedReader(new FileReader(repPub));
-            BigInteger e = new BigInteger(br.readLine());
-            BigInteger n = new BigInteger(br.readLine());
+
+            BigInteger e = null;
+            BigInteger n = null;
+
+            try {
+                e = new BigInteger(br.readLine());
+            } catch(NumberFormatException ex) {
+                System.err.println("Couldn't read exponent value in public key file");
+                System.exit(1);
+            }
+
+            try {
+                n = new BigInteger(br.readLine());
+            } catch(NumberFormatException ex) {
+                System.err.println("Couldn't read modulus value in public key file");
+                System.exit(1);
+            }
 
             // Encode the message with OAEP.
             OAEP oaep = new OAEP();
