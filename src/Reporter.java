@@ -34,6 +34,8 @@ public class Reporter {
 
             // Create Reporter model to handle messages from Leaker(s).
             ReporterModel model = new ReporterModel(new File(args[2]));
+            LeakerProxy proxy = new LeakerProxy(repSoc);
+            proxy.setLeakerListener(model);
 
         } catch (SocketException e) {
             System.err.println(e.getMessage());

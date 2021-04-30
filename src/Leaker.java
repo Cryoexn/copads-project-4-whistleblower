@@ -8,6 +8,7 @@
 import java.io.*;
 import java.math.BigInteger;
 import java.net.*;
+import java.util.Arrays;
 
 /**
  * Sends an encrypted message to rhost, rport using
@@ -90,12 +91,7 @@ public class Leaker {
      * @return encoded message.
      */
     public static BigInteger encodeMsg(String msg, OAEP oaep) {
-        byte[] seed = new byte[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-        };
+        byte[] seed = new byte[32];
         return oaep.encode(msg, seed);
     } // end createPayload.
 
